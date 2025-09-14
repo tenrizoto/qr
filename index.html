@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bitcoin QR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/b/ba/BitcoinSign.svg">
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            font-family: sans-serif;
+            box-sizing: border-box;
+            overflow: hidden; 
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center; /* centrum textu */
+        }
+        .options {
+            margin-bottom: 35px;
+        }
+        .options a {
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #000;
+        }
+        #content {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centrum obrázků a textu */
+            text-align: center;
+        }
+        #content img {
+            width: 50%; 
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        #content p {
+            margin: 10px 0;
+            font-weight: bold;
+            word-break: break-all;
+            font-size: 1.2em; 
+            max-width: 70%;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #000;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+        button:active { background: #333; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="options">
+        <a onclick="showLightning()">Lightning</a>|
+        <a onclick="showOnChain()">On Chain</a>|
+        <a onclick="showByCard()">By Card</a>
+    </div>
+
+    <div id="content">
+        <!-- Obsah se vloží přes JavaScript -->
+    </div>
+</div>
+
+<script>
+    function showLightning() {
+        document.getElementById('content').innerHTML = `
+            <img src="https://coinos.io/qr/gabbie%40coinos.io/raw" alt="lightning qr">
+            <p id="bitcoinAddress">gabbie@coinos.io</p>
+            <button onclick="copyAddress()">📋 Copy address</button>
+        `;
+    }
+
+    function showOnChain() {
+        document.getElementById('content').innerHTML = `
+            <img src="../img/bitcoin.jpg" alt="bitcoin qr">
+            <p id="bitcoinAddress">bc1qaddwhlq4k7rpgfjf36jp5dhtnn76gymre9qm6y</p>
+            <button onclick="copyAddress()">📋 Copy address</button>
+        `;
+    }
+
+    function showByCard() {
+        document.getElementById('content').innerHTML = `
+            <div id="stripeDiv">
+                <stripe-buy-button
+                    buy-button-id="buy_btn_1S3vuMJd4crRcsROieoSCRgx"
+                    publishable-key="pk_live_51P67pXJd4crRcsROmXlGUycPDIkZD3QJ2EhnRtSycrmHVfwYcnTrN4hnZFMNwzxPydUUG6nrnZ6GI45QykGy2ULr00nAEbW6Iz">
+                </stripe-buy-button>
+            <p style="font-size:0.6em">Powered by Stripe</p>
+            </div>
+        `;
+    }
+
+    function copyAddress() {
+        const addressEl = document.getElementById('bitcoinAddress');
+        if(addressEl) {
+            navigator.clipboard.writeText(addressEl.textContent).then(() => {
+                alert('Address copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy address: ', err);
+            });
+        }
+    }
+
+    // Automaticky otevřít Lightning tab po načtení
+    window.onload = showLightning;
+</script>
+
+</body>
+</html>
